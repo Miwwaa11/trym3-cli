@@ -30,7 +30,10 @@ BANNER = rf"""
 [{ACCENT}]  ░        ░░   ░ ▒ ▒ ░░  ░      ░      ░
 [{ACCENT}]            ░     ░ ░            ░      ░  ░
 [{ACCENT}]                  ░ ░
-"""
+
+[{ACCENT}]  TRYME — This is just my experimental CTF helper script.
+report any bugs, don't worry, this script is working 
+github: https://github.com/Miwwaa11/trym3-cli"""
 
 
 def _repo_root() -> str:
