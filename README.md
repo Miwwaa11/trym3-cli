@@ -82,16 +82,3 @@ offsetfind ./vuln_binary --offset-only
 
 Each tool has `--help` for the full option list.
 
-## Repo Structure
-
-```
-cli/
-├── ctftools/          # tryme launcher
-├── autodecode/        # crypto decoder
-├── fscan/             # file scanner
-├── rsatool/           # RSA attacks
-├── offsetfind/        # pwn offset finder
-├── name.txt           # tool list for the menu
-├── pyproject.toml
-└── Makefile
-```
