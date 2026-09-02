@@ -1,0 +1,12 @@
+README.md
+setup.py
+offsetfind/__init__.py
+offsetfind/cli.py
+offsetfind/core.py
+offsetfind.egg-info/PKG-INFO
+offsetfind.egg-info/SOURCES.txt
+offsetfind.egg-info/dependency_links.txt
+offsetfind.egg-info/entry_points.txt
+offsetfind.egg-info/requires.txt
+offsetfind.egg-info/top_level.txt
+tests/test_core.py

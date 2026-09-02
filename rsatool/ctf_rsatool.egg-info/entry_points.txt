@@ -1,0 +1,2 @@
+[console_scripts]
+rsatool = rsatool.cli:main

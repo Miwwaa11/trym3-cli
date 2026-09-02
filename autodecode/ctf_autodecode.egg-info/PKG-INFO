@@ -1,0 +1,47 @@
+Metadata-Version: 2.4
+Name: ctf-autodecode
+Version: 1.0.0
+Summary: Multi-Cipher Auto-Decoder untuk CTF
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: click>=8.0
+Requires-Dist: rich>=13.0
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# Multi-Cipher Auto-Decoder
+
+Tools CLI untuk mencoba banyak metode decode sekaligus, meng-chaining decode
+berlapis, dan memberi confidence score sehingga kandidat terbaik mudah ditemukan.
+
+## Instalasi
+
+```bash
+pip install -e .
+```
+
+Dependency: `click`, `rich` (wordlist kamus dibundel lokal).
+
+## Penggunaan
+
+```bash
+autodecode "SGVsbG8gQ1RGIQ=="
+autodecode --only-readable --max-depth 3 "..."
+echo "..." | autodecode
+```
+
+Opsi utama:
+
+| Opsi | Deskripsi |
+|------|-----------|
+| `TEXT` | Input ciphertext sebagai argumen posisi |
+| `--only-readable` | Hanya tampilkan hasil dengan confidence tinggi |
+| `--max-depth N` | Maksimum iterasi chaining (default 5) |
+| `--min-score F` | Ambang confidence 0.0–1.0 |
+| `--no-color` | Nonaktifkan warna output |
+
+Metode yang didukung: Base64, Base32, Base16/Hex, ROT13, ROT47, Morse Code,
+Binary, URL Encoding, Caesar cipher (semua 25 shift).

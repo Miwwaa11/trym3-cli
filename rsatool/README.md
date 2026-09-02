@@ -1,0 +1,51 @@
+# rsatool — RSA Attack Helper
+
+Tries common RSA attacks (weak implementations) against one or many key sets,
+and directly decrypts the ciphertext when one succeeds.
+
+## Installation
+
+```bash
+pip install -e .
+```
+
+Dependencies: `click`, `rich`, `sympy`.
+
+## Usage
+
+```bash
+rsatool --n 12345... --e 3 --c 98765...
+rsatool --input keys.json --all
+rsatool --input keys.json --attack wiener
+```
+
+Main options:
+
+| Option | Description |
+|--------|-------------|
+| `--n`, `--e`, `--c` | Single RSA parameters (decimal or hex with `--hex`) |
+| `--input FILE` | JSON file with key sets (multiple supported for common factor) |
+| `--attack NAME` | Run only specific attacks (comma-separated for several) |
+| `--all` | Run all attacks even after one succeeds |
+| `--timeout SEC` | Per-attack timeout (default 60) |
+| `--hex` | Interpret `--n/--e/--c` as hex |
+
+### JSON key format
+
+```json
+{
+  "keys": [
+    {"n": "221...", "e": 3, "c": "123..."},
+    {"n": "...", "e": 65537, "c": "..."}
+  ]
+}
+```
+
+Values can be decimal strings/ints or hex strings (with a `0x` prefix).
+
+## Supported attacks
+
+- `factor`: Common Factor (GCD across `n` for multiple keys)
+- `lowexp`: Low Public Exponent (small `e`, `m^e < n`, cube root for `e=3`)
+- `wiener`: Wiener's Attack (small `d`, continued fractions)
+- `fermat`: Fermat Factorization (close `p`, `q`)

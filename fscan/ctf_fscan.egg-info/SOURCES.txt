@@ -1,0 +1,12 @@
+README.md
+setup.py
+ctf_fscan.egg-info/PKG-INFO
+ctf_fscan.egg-info/SOURCES.txt
+ctf_fscan.egg-info/dependency_links.txt
+ctf_fscan.egg-info/entry_points.txt
+ctf_fscan.egg-info/requires.txt
+ctf_fscan.egg-info/top_level.txt
+fscan/__init__.py
+fscan/cli.py
+fscan/core.py
+tests/test_core.py

@@ -1,0 +1,13 @@
+README.md
+setup.py
+autodecode/__init__.py
+autodecode/cli.py
+autodecode/core.py
+autodecode/data/words.txt
+ctf_autodecode.egg-info/PKG-INFO
+ctf_autodecode.egg-info/SOURCES.txt
+ctf_autodecode.egg-info/dependency_links.txt
+ctf_autodecode.egg-info/entry_points.txt
+ctf_autodecode.egg-info/requires.txt
+ctf_autodecode.egg-info/top_level.txt
+tests/test_core.py

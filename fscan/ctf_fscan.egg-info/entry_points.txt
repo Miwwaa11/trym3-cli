@@ -1,0 +1,2 @@
+[console_scripts]
+fscan = fscan.cli:main

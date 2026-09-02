@@ -1,0 +1,2 @@
+[console_scripts]
+tryme = ctftools.cli:main

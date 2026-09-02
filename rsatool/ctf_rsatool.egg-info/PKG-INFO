@@ -1,0 +1,66 @@
+Metadata-Version: 2.4
+Name: ctf-rsatool
+Version: 1.0.0
+Summary: RSA Attack Helper untuk CTF crypto
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: click>=8.0
+Requires-Dist: rich>=13.0
+Requires-Dist: sympy>=1.10
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# rsatool — RSA Attack Helper
+
+Mencoba serangan RSA umum (weak implementation) terhadap satu atau banyak key
+set, langsung men-decrypt ciphertext jika berhasil.
+
+## Instalasi
+
+```bash
+pip install -e .
+```
+
+Dependency: `click`, `rich`, `sympy`.
+
+## Penggunaan
+
+```bash
+rsatool --n 12345... --e 3 --c 98765...
+rsatool --input keys.json --all
+rsatool --input keys.json --attack wiener
+```
+
+Opsi utama:
+
+| Opsi | Deskripsi |
+|------|-----------|
+| `--n`, `--e`, `--c` | Parameter RSA tunggal (desimal atau hex dengan `--hex`) |
+| `--input FILE` | File JSON berisi key set (mendukung multiple untuk common factor) |
+| `--attack NAME` | Hanya jalankan serangan tertentu (comma terpisah utk beberapa) |
+| `--all` | Jalankan semua serangan walau sudah ada yang berhasil |
+| `--timeout SEC` | Timeout per serangan (default 60) |
+| `--hex` | Interpretasi `--n/--e/--c` sebagai hex |
+
+### Format JSON keys
+
+```json
+{
+  "keys": [
+    {"n": "221...", "e": 3, "c": "123..."},
+    {"n": "...", "e": 65537, "c": "..."}
+  ]
+}
+```
+
+Nilai bisa desimal string/int atau hex string (prefix `0x`).
+
+## Serangan yang didukung
+
+- `factor`: Common Factor (GCD antar n untuk multiple keys)
+- `lowexp`: Low Public Exponent (e kecil, m^e < n, cube root e=3)
+- `wiener`: Wiener's Attack (d kecil, continued fraction)
+- `fermat`: Fermat Factorization (p, q berdekatan)

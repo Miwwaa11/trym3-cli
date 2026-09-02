@@ -1,0 +1,54 @@
+Metadata-Version: 2.4
+Name: ctf-fscan
+Version: 1.0.0
+Summary: File Signature & Metadata Scanner untuk CTF forensics
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: click>=8.0
+Requires-Dist: rich>=13.0
+Requires-Dist: Pillow>=9.0
+Requires-Dist: olefile>=0.46
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# fscan — File Signature & Metadata Scanner
+
+Mendeteksi mismatch antara ekstensi file dan magic bytes asli, mengekstrak
+metadata, mendeteksi file tersembunyi di dalam file lain, dan (opsional)
+mengekstraknya.
+
+## Instalasi
+
+```bash
+pip install -e .
+```
+
+Dependency: `click`, `rich`, `Pillow` (EXIF gambar), `olefile` (metadata OLE).
+Deteksi magic byte tidak butuh `libmagic`/`python-magic` — DB signature dibundel.
+
+## Penggunaan
+
+```bash
+fscan suspicious.jpg
+fscan ./forensics_folder --recursive
+fscan hidden.png --extract
+fscan ./folder --output json
+```
+
+Opsi utama:
+
+| Opsi | Deskripsi |
+|------|-----------|
+| `PATH` | File tunggal atau folder |
+| `--recursive` | Pindai folder secara rekursif |
+| `--output {table,json}` | Format output (default table) |
+| `--extract` | Ekstrak file tersembunyi yang terdeteksi ke `./<file>_extracted/` |
+| `--strings MIN` | Batas panjang minimum embedded string (default 6) |
+| `--no-strings` | Nonaktifkan ekstraksi string |
+
+Format magic bytes yang didukung: PNG, JPEG, GIF, BMP, WEBP, PDF, ZIP/OOXML,
+RAR, 7z, gzip, bzip2, xz, tar, ELF, PE, Mach-O, RIFF/WAV/AVI, FLAC, MP3, OGG,
+MP4, SQLite, Java class, PSD, ICO, TIFF, MIDI, PCAP(NG), OLE/doc.
