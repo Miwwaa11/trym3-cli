@@ -1,8 +1,3 @@
-# CTF Helper Tools Suite
-#
-# `offsetfind` butuh pwntools yang baru tersedia wheel untuk Python 3.13,
-# jadi setup memakai python3.13 kalau ada.
-
 PYTHON ?= $(shell command -v python3.13 || command -v python3)
 VENV   := .venv
 BIN    := $(VENV)/bin
