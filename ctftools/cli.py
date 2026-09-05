@@ -14,9 +14,9 @@ NAME_FILE = "name.txt"
 ACCENT = "#A60000"
 
 COMING_SOON = [
-    ("steghide", "Steganography extraction tool (Forensics)"),
-    ("hashcrack", "Hash identifier & cracker (Crypto)"),
-    ("revshell", "Reverse shell generator (Exploit)"),
+    ("xor-tool", "Automatic XOR key recovery & decode (Crypto)"),
+    ("jwtforge", "JWT forge/decode with alg confusion (Web)"),
+    ("bloodhound", "Active Directory recon query helper (Misc)"),
 ]
 
 BANNER = rf"""
@@ -34,6 +34,9 @@ BANNER = rf"""
 [{ACCENT}]  TRYME — This is just my experimental CTF helper script.
 report any bugs, don't worry, this script is working 
 github: https://github.com/Miwwaa11/trym3-cli"""
+
+
+
 
 
 def _repo_root() -> str:

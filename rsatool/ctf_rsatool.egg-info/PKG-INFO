@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: ctf-rsatool
 Version: 1.0.0
-Summary: RSA Attack Helper untuk CTF crypto
+Summary: RSA Attack Helper for CTF crypto
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 Requires-Dist: click>=8.0
@@ -15,18 +15,18 @@ Dynamic: summary
 
 # rsatool — RSA Attack Helper
 
-Mencoba serangan RSA umum (weak implementation) terhadap satu atau banyak key
-set, langsung men-decrypt ciphertext jika berhasil.
+Tries common RSA attacks (weak implementations) against one or many key sets,
+and directly decrypts the ciphertext when one succeeds.
 
-## Instalasi
+## Installation
 
 ```bash
 pip install -e .
 ```
 
-Dependency: `click`, `rich`, `sympy`.
+Dependencies: `click`, `rich`, `sympy`.
 
-## Penggunaan
+## Usage
 
 ```bash
 rsatool --n 12345... --e 3 --c 98765...
@@ -34,18 +34,18 @@ rsatool --input keys.json --all
 rsatool --input keys.json --attack wiener
 ```
 
-Opsi utama:
+Main options:
 
-| Opsi | Deskripsi |
-|------|-----------|
-| `--n`, `--e`, `--c` | Parameter RSA tunggal (desimal atau hex dengan `--hex`) |
-| `--input FILE` | File JSON berisi key set (mendukung multiple untuk common factor) |
-| `--attack NAME` | Hanya jalankan serangan tertentu (comma terpisah utk beberapa) |
-| `--all` | Jalankan semua serangan walau sudah ada yang berhasil |
-| `--timeout SEC` | Timeout per serangan (default 60) |
-| `--hex` | Interpretasi `--n/--e/--c` sebagai hex |
+| Option | Description |
+|--------|-------------|
+| `--n`, `--e`, `--c` | Single RSA parameters (decimal or hex with `--hex`) |
+| `--input FILE` | JSON file with key sets (multiple supported for common factor) |
+| `--attack NAME` | Run only specific attacks (comma-separated for several) |
+| `--all` | Run all attacks even after one succeeds |
+| `--timeout SEC` | Per-attack timeout (default 60) |
+| `--hex` | Interpret `--n/--e/--c` as hex |
 
-### Format JSON keys
+### JSON key format
 
 ```json
 {
@@ -56,11 +56,11 @@ Opsi utama:
 }
 ```
 
-Nilai bisa desimal string/int atau hex string (prefix `0x`).
+Values can be decimal strings/ints or hex strings (with a `0x` prefix).
 
-## Serangan yang didukung
+## Supported attacks
 
-- `factor`: Common Factor (GCD antar n untuk multiple keys)
-- `lowexp`: Low Public Exponent (e kecil, m^e < n, cube root e=3)
-- `wiener`: Wiener's Attack (d kecil, continued fraction)
-- `fermat`: Fermat Factorization (p, q berdekatan)
+- `factor`: Common Factor (GCD across `n` for multiple keys)
+- `lowexp`: Low Public Exponent (small `e`, `m^e < n`, cube root for `e=3`)
+- `wiener`: Wiener's Attack (small `d`, continued fractions)
+- `fermat`: Fermat Factorization (close `p`, `q`)

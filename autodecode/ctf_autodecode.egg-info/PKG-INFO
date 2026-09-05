@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: ctf-autodecode
 Version: 1.0.0
-Summary: Multi-Cipher Auto-Decoder untuk CTF
+Summary: Multi-Cipher Auto-Decoder for CTF
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 Requires-Dist: click>=8.0
@@ -14,18 +14,19 @@ Dynamic: summary
 
 # Multi-Cipher Auto-Decoder
 
-Tools CLI untuk mencoba banyak metode decode sekaligus, meng-chaining decode
-berlapis, dan memberi confidence score sehingga kandidat terbaik mudah ditemukan.
+A CLI tool that tries many decoding methods at once, chains layered decodes
+together, and gives each result a confidence score so the best candidate is
+easy to spot.
 
-## Instalasi
+## Installation
 
 ```bash
 pip install -e .
 ```
 
-Dependency: `click`, `rich` (wordlist kamus dibundel lokal).
+Dependencies: `click`, `rich` (bundled local dictionary wordlist).
 
-## Penggunaan
+## Usage
 
 ```bash
 autodecode "SGVsbG8gQ1RGIQ=="
@@ -33,15 +34,15 @@ autodecode --only-readable --max-depth 3 "..."
 echo "..." | autodecode
 ```
 
-Opsi utama:
+Main options:
 
-| Opsi | Deskripsi |
-|------|-----------|
-| `TEXT` | Input ciphertext sebagai argumen posisi |
-| `--only-readable` | Hanya tampilkan hasil dengan confidence tinggi |
-| `--max-depth N` | Maksimum iterasi chaining (default 5) |
-| `--min-score F` | Ambang confidence 0.0–1.0 |
-| `--no-color` | Nonaktifkan warna output |
+| Option | Description |
+|--------|-------------|
+| `TEXT` | Ciphertext as a positional argument |
+| `--only-readable` | Only show high-confidence results |
+| `--max-depth N` | Maximum chaining iterations (default 5) |
+| `--min-score F` | Confidence threshold 0.0–1.0 |
+| `--no-color` | Disable colored output |
 
-Metode yang didukung: Base64, Base32, Base16/Hex, ROT13, ROT47, Morse Code,
-Binary, URL Encoding, Caesar cipher (semua 25 shift).
+Supported methods: Base64, Base32, Base16/Hex, ROT13, ROT47, Morse Code,
+Binary, URL Encoding, HTML entities, and Caesar cipher (all 25 shifts).

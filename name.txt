@@ -2,3 +2,9 @@ autodecode
 fscan
 rsatool
 offsetfind
+hashcrack
+stego
+revshell
+netcat-recon
+binwalk-extract
+z3-solver

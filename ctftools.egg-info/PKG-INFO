@@ -6,285 +6,100 @@ Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 Requires-Dist: click>=8.0
 
-# trym3 — CTF Tools Suite
+# tryme
 
-A Python-based CLI tool suite for solving CTF (Capture The Flag) challenges
-across 3 main categories: **Crypto**, **Forensics**, and **Pwn**.
-
-```
- _                        _____
-| |_ _ __ _   _ _ __ ___ |___ /
-| __| '__| | | | '_ ` _ \  |_ \
-| |_| |  | |_| | | | | | |___) |
- \__|_|   \__, |_| |_| |_|____/
-          |___/
-```
+A small collection of CLI tools I built for solving CTF challenges. Covers crypto, forensics, and binary exploitation.
 
 ## Tools
 
-| Tool | Category | Description |
-|------|----------|-------------|
-| `autodecode` | Crypto | Multi-cipher auto-decoder (base64, hex, rot13, morse, etc.) with chaining & confidence scoring |
-| `rsatool` | Crypto | RSA attack helper (common factor, low exponent, wiener, fermat) |
-| `fscan` | Forensics | File signature & metadata scanner (magic bytes vs extension, hidden files) |
-| `offsetfind` | Pwn | Buffer overflow offset finder (cyclic pattern + checksec) |
+| Tool | Category | What it does |
+|------|----------|--------------|
+| `autodecode` | Crypto | Tries multiple decodings (base64, rot13, caesar, etc.) and ranks them by confidence |
+| `rsatool` | Crypto | Runs common RSA attacks — common factor, Wiener, Fermat, low exponent |
+| `fscan` | Forensics | Checks file signatures against extensions, finds hidden data |
+| `offsetfind` | Pwn | Finds buffer overflow offsets using cyclic patterns |
+
+## Disclaimer
+
+These tools are made for **legal CTF competitions and educational use only**. Don't use them on systems you don't own or have permission to test. I'm not responsible for any misuse.
 
 ## Installation
 
-> **Note:** `offsetfind` needs **pwntools**, which recently got native wheels
-> (`unicorn`, `capstone`) for Python 3.13. Use `python3.13` for a single venv
-> that can run everything.
+Requires Python 3.13+.
 
 ```bash
-make setup          # create .venv + install every tool + ctftools
-```
-
-Or manually:
-
-```bash
+git clone <repo-url> && cd cli
 python3.13 -m venv .venv
 source .venv/bin/activate
 pip install -e ./autodecode -e ./fscan -e ./rsatool -e ./offsetfind -e .
 ```
 
-After that all commands are available directly: `autodecode`, `fscan`,
-`rsatool`, `offsetfind`, plus the `ctftools` launcher. Each tool also ships
-its own `requirements.txt` if you want to install them separately.
-
-Verify everything works with:
+Or if you have `make`:
 
 ```bash
-make test
+make setup
 ```
 
-> **Note:** the project folder contains directories with the same names
-> (`autodecode/`, etc.), so do not `import autodecode` from the repo root
-> (it will shadow the project folder instead of the installed package). Use
-> the console scripts or `ctftools <tool>`.
-
-## Unified Entry Point
-
-Once the tools are installed, use `ctftools` as a single launcher (it
-dispatches to the console scripts via `execv`, so exit codes & streams are
-inherited):
+After installation, all tools are available as standalone commands. The `tryme` launcher provides an interactive menu:
 
 ```bash
-ctftools --help
-ctftools autodecode "SGVsbG8gQ1RGIQ=="
-ctftools rsatool --n 12345 --e 3 --c 98765
-ctftools fscan ./folder --recursive --output json
-ctftools offsetfind ./vuln_binary
+tryme
 ```
 
-### Interactive menu
+## Usage
 
-Run `ctftools` without a subcommand to pick a tool interactively. The trym3
-ASCII banner is shown first, then a numbered list:
-
-```text
- _                        _____
-| |_ _ __ _   _ _ __ ___ |___ /
-| __| '__| | | | '_ ` _ \  |_ \
-| |_| |  | |_| | | | | | |___) |
- \__|_|   \__, |_| |_| |_|____/
-          |___/
-trym3 - CTF Tools Launcher
-
-Select a tool:
-
-  1. autodecode
-  2. fscan
-  3. rsatool
-  4. offsetfind
-  0. Exit
-
-Choice [0-4]:
-```
-
-Type a number, then the launcher shows that tool's `--help`. The list is read
-from the `name.txt` file at the repo root (one tool name per line), so edit
-that file to add/remove tools shown in the menu.
-
-## Tutorials
-
-### autodecode — Multi-Cipher Auto-Decoder
-
-Decode a single or chained encoding automatically, ranked by a confidence
-score.
+### Launcher
 
 ```bash
-# Basic decode
+tryme
+```
+
+Pick a number, enter your text, get results. Type `C` to switch tools, `E` to quit.
+
+### autodecode
+
+```bash
 autodecode "SGVsbG8gQ1RGIQ=="
-
-# Only show highly-readable results, deepen the chaining search
-autodecode --only-readable --max-depth 3 "VGhpcyBpcyBhIHRlc3Q="
-
-# Pipe input from another command
+autodecode --only-readable "VGhpcyBpcyBhIHRlc3Q="
 echo "..." | autodecode
-
-# Exhaustive BFS over every candidate
-autodecode --all "SGVsbG8="
 ```
 
-Key options:
-
-| Option | Description |
-|--------|-------------|
-| `TEXT` | Ciphertext as a positional argument |
-| `--only-readable` | Show only high-confidence results |
-| `--max-depth N` | Maximum chaining iterations (default 5) |
-| `--min-score F` | Confidence threshold 0.0–1.0 |
-| `--no-color` | Disable colored output |
-
-Supported methods: Base64, Base32, Base16/Hex, ROT13, ROT47, Morse Code,
-Binary, URL Encoding, HTML entities, and Caesar cipher (all 25 shifts).
-
-### rsatool — RSA Attack Helper
+### rsatool
 
 ```bash
-# Single key set (decimal)
 rsatool --n 12345... --e 3 --c 98765...
-
-# Values as hex
-rsatool --n 0x... --e 0x10001 --c 0x... --hex
-
-# Run every attack even after one succeeds
-rsatool --input keys.json --all
-
-# Run only the Wiener attack
 rsatool --input keys.json --attack wiener
-
-# Run several specific attacks
-rsatool --n 12345 --e 11 --c 9999 --attack common_factor,low_exp
+rsatool --n 0x... --e 0x10001 --c 0x... --hex
 ```
 
-Key options:
-
-| Option | Description |
-|--------|-------------|
-| `--n`, `--e`, `--c` | Single RSA parameters (decimal, or hex with `--hex`) |
-| `--input FILE` | JSON file with key sets (multiple allowed for common factor) |
-| `--attack NAME` | Run only specific attacks (comma-separated for several) |
-| `--all` | Run all attacks even after one succeeds |
-| `--timeout SEC` | Per-attack timeout (default 60) |
-| `--hex` | Interpret `--n/--e/--c` as hex |
-
-JSON key file format:
-
-```json
-{
-  "keys": [
-    {"n": "221...", "e": 3, "c": "123..."},
-    {"n": "...", "e": 65537, "c": "..."}
-  ]
-}
-```
-
-Values can be decimal strings/ints or hex strings (with a `0x` prefix).
-
-Supported attacks:
-
-- `common_factor`: Common Factor (GCD across multiple `n`)
-- `low_exp`: Low Public Exponent (small `e`, `m^e < n`, cube root for `e=3`)
-- `wiener`: Wiener's Attack (small `d`, continued fractions)
-- `fermat`: Fermat Factorization (close `p`, `q`)
-
-### fscan — File Signature & Metadata Scanner
+### fscan
 
 ```bash
-# Inspect a single file
 fscan suspicious.jpg
-
-# Scan a folder recursively
-fscan ./forensics_folder --recursive
-
-# Extract detected hidden files
+fscan ./folder --recursive --output json
 fscan hidden.png --extract
-
-# JSON output
-fscan ./folder --output json
 ```
 
-Key options:
-
-| Option | Description |
-|--------|-------------|
-| `PATH` | Single file or folder |
-| `--recursive` | Scan folders recursively |
-| `--output {table,json}` | Output format (default table) |
-| `--extract` | Extract detected hidden files to `./<file>_extracted/` |
-| `--strings-min MIN` | Minimum length for embedded strings (default 6) |
-| `--no-strings` | Disable string extraction |
-
-Supported magic-byte formats: PNG, JPEG, GIF, BMP, WEBP, PDF, ZIP/OOXML,
-RAR, 7z, gzip, bzip2, xz, tar, ELF, PE, Mach-O, RIFF/WAV/AVI, FLAC, MP3, OGG,
-MP4, SQLite, Java class, PSD, ICO, TIFF, MIDI, PCAP(NG), OLE/doc.
-
-### offsetfind — Pwn Buffer Overflow Offset Finder
+### offsetfind
 
 ```bash
-# Basic local binary
 offsetfind ./vuln_binary
-
-# Probe a remote service (offset computed from the local binary)
 offsetfind ./vuln_binary --host target.ctf.com --port 1337
-
-# Bigger cyclic pattern
-offsetfind ./vuln_binary --pattern-length 2048
-
-# Only print the offset value (for scripting)
 offsetfind ./vuln_binary --offset-only
 ```
 
-Key options:
-
-| Option | Description |
-|--------|-------------|
-| `BINARY` | Path to the local binary |
-| `--host`, `--port` | Remote target service |
-| `--pattern-length N` | Cyclic pattern length (default 1024) |
-| `--timeout SEC` | Process/connection timeout (default 5) |
-| `--no-checksec` | Skip the checksec protection overview |
-| `--offset-only` | Only print the offset value (compact output) |
-
-Example output for a local binary (offset fully computed from the crash plus
-core dump, including the base address for PIE binaries):
-
-```text
-Buffer overflow offset: 40
-
-Fault address : 0x6161616161616166
-RIP           : 0x55b4187e61a0
-RSP           : 0x7ffed4d43b78
-
-Base address (PIE) : 0x55b4187e5000
-```
-
-For a remote target, the offset is still computed from the local binary (if
-given); the remote connection is only used to confirm the payload crashes the
-service (it drops the connection). Without a local binary, `offsetfind` can
-only report the remote status, not the offset value.
-
-## Ethical Notes
-
-All tools are intended for legal/educational CTF activities (official
-challenges, private labs). Do not use them to attack systems without
-authorization.
+Each tool has `--help` for the full option list.
 
 ## Repo Structure
 
 ```
 cli/
-├── ctftools/             # Unified launcher (entry point `ctftools`, trym3 banner)
-├── autodecode/           # Tool 1 — crypto auto-decode
-├── fscan/                # Tool 2 — file signature scanner
-├── rsatool/              # Tool 3 — RSA attacks
-├── offsetfind/           # Tool 4 — buffer overflow offset finder
-├── docs/PRD_CTF_Tools.md
+├── ctftools/          # tryme launcher
+├── autodecode/        # crypto decoder
+├── fscan/             # file scanner
+├── rsatool/           # RSA attacks
+├── offsetfind/        # pwn offset finder
+├── name.txt           # tool list for the menu
 ├── pyproject.toml
-├── name.txt              # Tool list for the ctftools menu
-└── README.md
+└── Makefile
 ```
-
-
-

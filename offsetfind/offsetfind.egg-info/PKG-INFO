@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: offsetfind
 Version: 0.1.0
-Summary: Buffer Overflow Offset Finder berbasis pwntools.
+Summary: Buffer Overflow Offset Finder based on pwntools.
 Requires-Python: >=3.9
 Requires-Dist: click
 Requires-Dist: rich
